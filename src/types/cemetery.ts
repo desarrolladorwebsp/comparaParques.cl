@@ -3,9 +3,29 @@ export type CemeteryType =
   | "Cementerio Tradicional"
   | "Crematorio";
 
-export interface Cemetery {
+export type PlanModality = "Prevención" | "Urgencia";
+
+export interface CemeteryPlan {
   id: string;
   name: string;
+  capacity: string;
+  modality: PlanModality;
+  priceFrom: number;
+  description: string;
+}
+
+export interface CemeteryMaintenance {
+  type: "Anual" | "Perpetua" | "Mixta";
+  annualEstimate?: number;
+  summary: string;
+  includes: string[];
+}
+
+export interface Cemetery {
+  id: string;
+  slug: string;
+  name: string;
+  logoUrl: string;
   region: string;
   commune: string;
   address: string;
@@ -14,8 +34,16 @@ export interface Cemetery {
   type: CemeteryType;
   rating: number;
   minPrice: number;
-  slug: string;
   imageUrl: string;
+  mainImage: string;
+  gallery: string[];
+  videoUrl: string;
+  description: string;
+  features: string[];
+  plans: CemeteryPlan[];
+  maintenanceCosts: CemeteryMaintenance;
+  accessNotes: string;
+  transitNotes: string;
 }
 
 export const CEMETERY_TYPES: CemeteryType[] = [

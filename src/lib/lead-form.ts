@@ -2,7 +2,6 @@ import {
   COMMUNE_OPTIONS,
   CONTACT_SCHEDULE_OPTIONS,
   NEED_TYPE_OPTIONS,
-  PARK_OPTIONS,
   type LeadFormValues,
 } from "@/types/lead-form";
 
@@ -14,13 +13,29 @@ function findLabel(
   return match?.label ?? match?.title ?? value;
 }
 
-export function getLeadSummaryLabels(values: LeadFormValues) {
+export function buildParkPreferenceOptions(
+  parks: Array<{ slug: string; name: string }>,
+) {
+  return [
+    { value: "orientacion", label: "Prefiero que me orienten desde cero" },
+    ...parks.map((park) => ({
+      value: park.slug,
+      label: park.name,
+    })),
+    { value: "otro", label: "Otro / Lo conversaré con quien me oriente" },
+  ];
+}
+
+export function getLeadSummaryLabels(
+  values: LeadFormValues,
+  parkOptions: Array<{ value: string; label: string }> = [],
+) {
   return {
     needType: findLabel(
       NEED_TYPE_OPTIONS.map((o) => ({ value: o.value, title: o.title })),
       values.needType,
     ),
-    parkPreference: findLabel([...PARK_OPTIONS], values.parkPreference),
+    parkPreference: findLabel(parkOptions, values.parkPreference),
     commune: findLabel([...COMMUNE_OPTIONS], values.commune),
     contactSchedule: findLabel(
       CONTACT_SCHEDULE_OPTIONS.map((o) => ({

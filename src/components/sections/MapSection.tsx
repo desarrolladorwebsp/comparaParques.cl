@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import {
   GoogleMap,
@@ -10,7 +10,6 @@ import {
 } from "@react-google-maps/api";
 import { motion } from "framer-motion";
 import { MapPin, Search, Star } from "lucide-react";
-import cemeteriesData from "../../../data/cemeteries.json";
 import { Badge, Button } from "@/components/ui";
 import { BackgroundPattern } from "@/components/ui/BackgroundPattern";
 import { formatMinPrice, MAP_STYLES, MARKER_ICON_URL } from "@/lib/map";
@@ -22,8 +21,6 @@ import {
   type Cemetery,
   type CemeteryType,
 } from "@/types/cemetery";
-
-const cemeteries = cemeteriesData as Cemetery[];
 
 const mapContainerStyle = {
   width: "100%",
@@ -38,6 +35,27 @@ function scrollToAsesoria() {
 }
 
 export function MapSection() {
+  const [cemeteries, setCemeteries] = useState<Cemetery[]>([]);
+  const [loadingParks, setLoadingParks] = useState(true);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const response = await fetch("/api/parks");
+        if (!response.ok) throw new Error("fetch failed");
+        const data = (await response.json()) as { parks: Cemetery[] };
+        if (!cancelled) setCemeteries(data.parks);
+      } catch {
+        if (!cancelled) setCemeteries([]);
+      } finally {
+        if (!cancelled) setLoadingParks(false);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
   const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY ?? "";
   const { isLoaded, loadError } = useJsApiLoader({
     id: "comparaparques-google-maps",
@@ -54,7 +72,7 @@ export function MapSection() {
       Array.from(new Set(cemeteries.map((item) => item.commune))).sort((a, b) =>
         a.localeCompare(b, "es"),
       ),
-    [],
+    [cemeteries],
   );
 
   const filtered = useMemo(() => {
@@ -69,7 +87,7 @@ export function MapSection() {
         activeTypes.length === 0 || activeTypes.includes(item.type);
       return matchesCommune && matchesType;
     });
-  }, [activeTypes, communeQuery]);
+  }, [activeTypes, communeQuery, cemeteries]);
 
   const selected = filtered.find((item) => item.id === selectedId) ?? null;
 
@@ -204,7 +222,11 @@ export function MapSection() {
               </div>
 
               <div className="flex-1 overflow-y-auto p-3">
-                {filtered.length === 0 ? (
+                {loadingParks ? (
+                  <p className="px-2 py-8 text-center text-sm text-brand-dark/50">
+                    Cargando parques desde la base de datos...
+                  </p>
+                ) : filtered.length === 0 ? (
                   <p className="px-2 py-8 text-center text-sm text-brand-dark/50">
                     No encontramos opciones con esos criterios. Prueba otra comuna o tipo.
                   </p>
@@ -318,15 +340,22 @@ export function MapSection() {
                             <span className="mx-1 text-brand-dark/25">·</span>
                             Desde {formatMinPrice(selected.minPrice)}
                           </div>
-                          <Button
-                            variant="primary"
-                            size="sm"
-                            fullWidth
-                            className="mt-3"
-                            onClick={scrollToAsesoria}
-                          >
-                            Pedir orientación sobre este lugar
-                          </Button>
+                          <div className="mt-3 space-y-2">
+                            <a
+                              href={`/parques/${selected.slug}`}
+                              className="inline-flex h-10 w-full items-center justify-center rounded-xl bg-brand-dark px-4 text-sm font-medium text-white transition hover:bg-[#162a1f]"
+                            >
+                              Ver ficha completa
+                            </a>
+                            <Button
+                              variant="primary"
+                              size="sm"
+                              fullWidth
+                              onClick={scrollToAsesoria}
+                            >
+                              Pedir orientación sobre este lugar
+                            </Button>
+                          </div>
                         </div>
                       </div>
                     </InfoWindowF>

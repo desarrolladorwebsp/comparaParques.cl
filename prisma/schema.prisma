@@ -1,0 +1,48 @@
+// Prisma schema — ComparaParques (Neon / Vercel Postgres)
+// https://pris.ly/d/prisma-schema
+
+generator client {
+  provider     = "prisma-client"
+  output       = "../src/generated/prisma"
+  moduleFormat = "cjs"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+/// Parque cementerio, cementerio tradicional o crematorio
+model Park {
+  id                   String   @id @default(cuid())
+  slug                 String   @unique
+  name                 String
+  type                 String
+  status               String   @default("Activo")
+  region               String
+  commune              String
+  address              String
+  lat                  Float
+  lng                  Float
+  description          String   @db.Text
+  logoUrl              String
+  imageUrl             String
+  mainImage            String
+  gallery              String[]
+  videoUrl             String   @default("")
+  features             String[]
+  plans                Json
+  maintenanceCosts     Json
+  accessNotes          String   @db.Text @default("")
+  transitNotes         String   @db.Text @default("")
+  rating               Float    @default(4.5)
+  minPrice             Int      @default(0)
+  assignedExecutiveIds String[] @default([])
+  partnerSellerIds     String[] @default([])
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@index([status])
+  @@index([commune])
+  @@index([type])
+  @@map("parks")
+}

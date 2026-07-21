@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import {
   ComparisonTable,
   FaqSection,
@@ -5,6 +6,7 @@ import {
   LeadFormSection,
   MapSection,
   NeutralitySection,
+  PartnerRecruitmentSection,
   ParksMarqueeSection,
   WhyPlanAheadSection,
 } from "@/components/sections";
@@ -18,8 +20,11 @@ export default function Home() {
       <ComparisonTable />
       <WhyPlanAheadSection />
       <MapSection />
-      <LeadFormSection />
+      <Suspense fallback={null}>
+        <LeadFormSection />
+      </Suspense>
       <FaqSection />
+      <PartnerRecruitmentSection />
     </main>
   );
 }

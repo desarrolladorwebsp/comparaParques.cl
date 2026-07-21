@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   AnimatePresence,
   motion,
   type Variants,
 } from "framer-motion";
+import { useSearchParams } from "next/navigation";
 import { useForm, Controller } from "react-hook-form";
 import {
   Button,
@@ -17,6 +18,7 @@ import {
 } from "@/components/ui";
 import { BackgroundPattern } from "@/components/ui/BackgroundPattern";
 import {
+  buildParkPreferenceOptions,
   buildWhatsAppUrl,
   getLeadSummaryLabels,
   isValidChileanPhone,
@@ -28,7 +30,6 @@ import {
   LEAD_FORM_DEFAULT_VALUES,
   LEAD_FORM_STEPS,
   NEED_TYPE_OPTIONS,
-  PARK_OPTIONS,
   type LeadFormStep,
   type LeadFormValues,
 } from "@/types/lead-form";
@@ -59,10 +60,14 @@ const STEP_FIELDS: Record<LeadFormStep, (keyof LeadFormValues)[]> = {
 };
 
 export function LeadFormSection() {
+  const searchParams = useSearchParams();
   const [step, setStep] = useState<LeadFormStep>(1);
   const [direction, setDirection] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [parkOptions, setParkOptions] = useState(() =>
+    buildParkPreferenceOptions([]),
+  );
 
   const {
     register,
@@ -70,6 +75,7 @@ export function LeadFormSection() {
     handleSubmit,
     trigger,
     getValues,
+    setValue,
     watch,
     formState: { errors },
   } = useForm<LeadFormValues>({
@@ -77,8 +83,38 @@ export function LeadFormSection() {
     mode: "onTouched",
   });
 
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const response = await fetch("/api/parks");
+        if (!response.ok) return;
+        const data = (await response.json()) as {
+          parks: Array<{ slug: string; name: string }>;
+        };
+        if (!cancelled) {
+          setParkOptions(buildParkPreferenceOptions(data.parks));
+        }
+      } catch {
+        /* keep fallback options */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    const parkSlug = searchParams.get("park");
+    if (!parkSlug) return;
+    const exists = parkOptions.some((option) => option.value === parkSlug);
+    if (exists) {
+      setValue("parkPreference", parkSlug, { shouldDirty: true });
+    }
+  }, [searchParams, setValue, parkOptions]);
+
   const values = watch();
-  const summary = getLeadSummaryLabels(values);
+  const summary = getLeadSummaryLabels(values, parkOptions);
 
   async function goNext() {
     const valid = await trigger(STEP_FIELDS[step], { shouldFocus: true });
@@ -174,6 +210,7 @@ export function LeadFormSection() {
                           control={control}
                           register={register}
                           errors={errors}
+                          parkOptions={parkOptions}
                         />
                       ) : null}
 
@@ -248,10 +285,12 @@ function StepRequirement({
   control,
   register,
   errors,
+  parkOptions,
 }: {
   control: FormControl;
   register: FormRegister;
   errors: FieldErrors;
+  parkOptions: Array<{ value: string; label: string }>;
 }) {
   return (
     <>
@@ -279,7 +318,7 @@ function StepRequirement({
         <SelectInput
           label="Parque o cementerio de interés"
           placeholder="Elige una opción"
-          options={[...PARK_OPTIONS]}
+          options={[...parkOptions]}
           error={errors.parkPreference?.message}
           {...register("parkPreference", {
             required: "Elige una preferencia para poder orientarte mejor",

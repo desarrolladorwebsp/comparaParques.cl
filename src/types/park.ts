@@ -3,4 +3,5 @@ export interface Park {
   name: string;
   region: string;
   logoUrl: string;
+  slug: string;
 }

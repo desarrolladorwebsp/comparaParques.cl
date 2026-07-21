@@ -4,5 +4,6 @@ export { HeroSection } from "./HeroSection";
 export { LeadFormSection } from "./LeadFormSection";
 export { MapSection } from "./MapSection";
 export { NeutralitySection } from "./NeutralitySection";
+export { PartnerRecruitmentSection } from "./PartnerRecruitmentSection";
 export { ParksMarqueeSection } from "./ParksMarqueeSection";
 export { WhyPlanAheadSection } from "./WhyPlanAheadSection";

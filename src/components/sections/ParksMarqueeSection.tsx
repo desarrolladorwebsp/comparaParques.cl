@@ -1,5 +1,7 @@
 "use client";
 
+import { useEffect, useMemo, useState } from "react";
+import Link from "next/link";
 import { motion } from "framer-motion";
 import {
   Building2,
@@ -12,13 +14,9 @@ import {
   Users,
   type LucideIcon,
 } from "lucide-react";
-import parksData from "../../../data/parks.json";
 import type { Park } from "@/types/park";
 import { cn } from "@/lib/cn";
 import { easeOut } from "@/lib/motion";
-
-const parks = parksData as Park[];
-const loopParks = [...parks, ...parks];
 
 type ParkTone = {
   card: string;
@@ -85,6 +83,20 @@ const PARK_TONES: Record<string, ParkTone> = {
     badge: "bg-[#7a5740]/10 text-[#7a5740]",
     Icon: Building2,
   },
+  "9": {
+    card: "border-[#d7e0ea] bg-gradient-to-br from-[#f4f7fb] to-white",
+    tile: "bg-[#dde7f1]",
+    icon: "text-[#3d5873]",
+    badge: "bg-[#3d5873]/10 text-[#3d5873]",
+    Icon: Landmark,
+  },
+  "10": {
+    card: "border-[#e0d8cf] bg-gradient-to-br from-[#faf6f1] to-white",
+    tile: "bg-[#ebe2d8]",
+    icon: "text-[#6d5644]",
+    badge: "bg-[#6d5644]/10 text-[#6d5644]",
+    Icon: Building2,
+  },
 };
 
 const DEFAULT_TONE: ParkTone = {
@@ -100,9 +112,11 @@ function ParkBadge({ park }: { park: Park }) {
   const Icon = tone.Icon;
 
   return (
-    <article
+    <Link
+      href={`/parques/${park.slug}`}
+      aria-label={`Ver ficha de ${park.name}`}
       className={cn(
-        "flex w-[17.5rem] shrink-0 items-center gap-4 rounded-3xl border px-4 py-4 shadow-soft",
+        "flex w-[17.5rem] shrink-0 cursor-pointer items-center gap-4 rounded-3xl border px-4 py-4 shadow-soft",
         "transition duration-300 hover:-translate-y-1 hover:shadow-lift",
         tone.card,
       )}
@@ -129,11 +143,53 @@ function ParkBadge({ park }: { park: Park }) {
           {park.region}
         </span>
       </div>
-    </article>
+    </Link>
   );
 }
 
 export function ParksMarqueeSection({ className }: { className?: string }) {
+  const [parks, setParks] = useState<Park[]>([]);
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        const response = await fetch("/api/parks");
+        if (!response.ok) return;
+        const data = (await response.json()) as {
+          parks: Array<{
+            id: string;
+            name: string;
+            region: string;
+            logoUrl: string;
+            slug: string;
+          }>;
+        };
+        if (!cancelled) {
+          setParks(
+            data.parks.map((park) => ({
+              id: park.id,
+              name: park.name,
+              region: park.region,
+              logoUrl: park.logoUrl,
+              slug: park.slug,
+            })),
+          );
+        }
+      } catch {
+        /* empty marquee on error */
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  const loopParks = useMemo(
+    () => (parks.length > 0 ? [...parks, ...parks] : []),
+    [parks],
+  );
+
   return (
     <section
       id="parques"
@@ -167,17 +223,23 @@ export function ParksMarqueeSection({ className }: { className?: string }) {
             "linear-gradient(to right, transparent, black 6%, black 94%, transparent)",
         }}
       >
-        <div
-          className={cn(
-            "flex w-max gap-4 will-change-transform sm:gap-5",
-            "animate-marquee motion-reduce:animate-none",
-            "group-hover:[animation-play-state:paused]",
-          )}
-        >
-          {loopParks.map((park, index) => (
-            <ParkBadge key={`${park.id}-${index}`} park={park} />
-          ))}
-        </div>
+        {loopParks.length > 0 ? (
+          <div
+            className={cn(
+              "flex w-max gap-4 will-change-transform sm:gap-5",
+              "animate-marquee motion-reduce:animate-none",
+              "group-hover:[animation-play-state:paused]",
+            )}
+          >
+            {loopParks.map((park, index) => (
+              <ParkBadge key={`${park.id}-${index}`} park={park} />
+            ))}
+          </div>
+        ) : (
+          <p className="px-4 text-center text-sm text-brand-dark/45">
+            Cargando catálogo de parques...
+          </p>
+        )}
       </div>
 
       <span className="sr-only">
