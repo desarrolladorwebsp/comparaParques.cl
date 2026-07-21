@@ -1,0 +1,29 @@
+---
+description: Criterio UX/UI responsivo obligatorio para ComparaParques.cl
+alwaysApply: true
+---
+
+# UX/UI responsivo — ComparaParques.cl
+
+Garantiza siempre una experiencia de usuario impecable, fluida y adaptativa en todos los dispositivos.
+
+## Breakpoints (mobile-first)
+
+- **Móvil (smartphones):** base / default; diseño prioritario
+- **Mediano (tablets y laptops):** `md:` / `lg:`
+- **Grande (desktop / monitores):** `xl:` / `2xl:`
+
+## Reglas de maquetación
+
+- Toda la UI debe ser estrictamente responsiva; no asumas un solo viewport
+- Optimiza tipografía, espaciado, tipografía y targets táctiles para móvil primero
+- Evita overflow horizontal; usa contenedores fluidos (`max-w-*`, `w-full`, `px-*`)
+- Imágenes y media deben escalar sin romper el layout (`max-w-full`, aspect ratios)
+- Navegación y CTAs deben ser usables en touch (≥ ~44px de área útil cuando aplique)
+- Prueba mentalmente cada bloque en móvil, tablet y desktop antes de dar por cerrado un cambio
+
+## Qué evitar
+
+- Layouts fijos en px que no colapsan en pantallas pequeñas
+- Texto ilegible o botones inaccesibles en móvil
+- Componentes que solo “se ven bien” en desktop
