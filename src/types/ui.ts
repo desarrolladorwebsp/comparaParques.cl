@@ -16,6 +16,7 @@ export interface ButtonProps {
   className?: string;
   type?: "button" | "submit" | "reset";
   disabled?: boolean;
+  isLoading?: boolean;
   onClick?: MouseEventHandler<HTMLButtonElement>;
 }
 
@@ -40,6 +41,7 @@ export interface SelectInputProps
   placeholder?: string;
   className?: string;
   wrapperClassName?: string;
+  error?: string;
 }
 
 export interface SearchInputProps
@@ -47,5 +49,60 @@ export interface SearchInputProps
   label: string;
   className?: string;
   wrapperClassName?: string;
+}
+
+export type CardVariant = "light" | "muted" | "white" | "highlighted";
+export type CardPadding = "sm" | "md" | "lg";
+
+export interface CardProps {
+  children: ReactNode;
+  variant?: CardVariant;
+  padding?: CardPadding;
+  className?: string;
+  as?: "div" | "article" | "section";
+}
+
+export interface IconFeatureProps {
+  icon: ReactNode;
+  title: string;
+  description: string;
+  className?: string;
+  iconClassName?: string;
+}
+
+export interface TextInputProps
+  extends Omit<InputHTMLAttributes<HTMLInputElement>, "size"> {
+  label: string;
+  error?: string;
+  hint?: string;
+  className?: string;
+  wrapperClassName?: string;
+}
+
+export interface RadioCardOption {
+  value: string;
+  title: string;
+  description?: string;
+}
+
+export interface RadioCardGroupProps {
+  label: string;
+  name: string;
+  options: RadioCardOption[];
+  value?: string;
+  onChange: (value: string) => void;
+  error?: string;
+  className?: string;
+}
+
+export interface FormStepItem {
+  id: number;
+  label: string;
+}
+
+export interface FormStepperProps {
+  steps: FormStepItem[];
+  currentStep: number;
+  className?: string;
 }
 

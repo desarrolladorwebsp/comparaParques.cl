@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Geist } from "next/font/google";
+import { Footer, NavBar } from "@/components/ui";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -9,7 +10,7 @@ const geistSans = Geist({
 export const metadata: Metadata = {
   title: "ComparaParques.cl",
   description:
-    "Compara cementerios, sepulturas y servicios exequiales en Chile. Asesoría 100% independiente y gratuita.",
+    "Orientación humana e independiente para comparar parques, cementerios y servicios exequiales en Chile. Con calma, claridad y cero presión.",
 };
 
 export default function RootLayout({
@@ -19,8 +20,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="es">
-      <body className={`${geistSans.className} antialiased bg-brand-light text-brand-dark`}>
-        {children}
+      <body
+        className={`${geistSans.className} flex min-h-full flex-col antialiased bg-brand-light text-brand-dark`}
+      >
+        <NavBar />
+        <div className="flex-1">{children}</div>
+        <Footer />
       </body>
     </html>
   );

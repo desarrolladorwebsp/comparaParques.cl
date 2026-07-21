@@ -1,10 +1,15 @@
 "use client";
 
 import { useState, type FormEvent } from "react";
+import Image from "next/image";
 import { motion } from "framer-motion";
+import { Trees } from "lucide-react";
 import { Badge, Button, SearchInput, SelectInput } from "@/components/ui";
+import { BackgroundPattern } from "@/components/ui/BackgroundPattern";
 import type { HeroSearchValues } from "@/types/hero";
 import type { SelectOption } from "@/types/ui";
+import { SITE_MEDIA } from "@/lib/media";
+import { easeOut } from "@/lib/motion";
 
 const LOCATION_OPTIONS: SelectOption[] = [
   { value: "rm", label: "Región Metropolitana" },
@@ -22,20 +27,16 @@ const SERVICE_OPTIONS: SelectOption[] = [
 ];
 
 const NEED_OPTIONS: SelectOption[] = [
-  { value: "inmediata", label: "Necesidad Inmediata" },
-  { value: "planificacion", label: "Planificación a Futuro" },
+  { value: "inmediata", label: "Necesidad inmediata" },
+  { value: "planificacion", label: "Planificación con anticipación" },
 ];
 
 const fadeUp = {
-  hidden: { opacity: 0, y: 18 },
+  hidden: { opacity: 0, y: 20 },
   visible: (delay: number) => ({
     opacity: 1,
     y: 0,
-    transition: {
-      duration: 0.55,
-      ease: [0.22, 1, 0.36, 1] as const,
-      delay,
-    },
+    transition: { duration: 0.6, ease: easeOut, delay },
   }),
 };
 
@@ -53,17 +54,26 @@ export function HeroSection() {
   }
 
   return (
-    <section className="relative overflow-hidden bg-brand-light">
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_top,_rgba(30,58,43,0.06),_transparent_55%)]"
-      />
-      <div
-        aria-hidden
-        className="pointer-events-none absolute -right-24 top-10 h-64 w-64 rounded-full bg-brand-orange/10 blur-3xl"
-      />
+    <section
+      id="inicio"
+      className="relative scroll-mt-24 overflow-hidden bg-brand-dark"
+    >
+      <div className="absolute inset-0">
+        <Image
+          src={SITE_MEDIA.heroGarden}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-[center_30%]"
+        />
+        <div className="absolute inset-0 bg-brand-dark/65" />
+        <div className="absolute inset-0 bg-gradient-to-b from-brand-dark/80 via-brand-dark/55 to-brand-dark" />
+        <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-brand-dark via-brand-dark/90 to-transparent" />
+      </div>
+      <BackgroundPattern variant="dots-light" className="opacity-15" />
 
-      <div className="relative mx-auto flex min-h-[100svh] w-full max-w-6xl flex-col justify-center px-4 py-16 sm:px-6 sm:py-20 lg:px-8 lg:py-24">
+      <div className="relative mx-auto flex min-h-[100dvh] w-full max-w-6xl flex-col justify-center px-4 py-20 sm:px-6 sm:py-24 lg:px-8">
         <div className="mx-auto flex w-full max-w-3xl flex-col items-center text-center lg:max-w-4xl">
           <motion.div
             custom={0}
@@ -71,37 +81,52 @@ export function HeroSection() {
             initial="hidden"
             animate="visible"
           >
-            <Badge withDot variant="outline">
-              Asesoría 100% Independiente y Gratuita
+            <Badge
+              withDot
+              variant="outline"
+              className="border-white/25 bg-white/15 text-brand-light backdrop-blur-md"
+            >
+              Orientación independiente y gratuita
             </Badge>
           </motion.div>
 
-          <motion.h1
-            custom={0.08}
+          <motion.div
+            custom={0.06}
             variants={fadeUp}
             initial="hidden"
             animate="visible"
-            className="mt-6 text-balance text-3xl font-semibold leading-[1.15] tracking-tight text-brand-dark sm:text-4xl md:text-5xl lg:text-[3.25rem]"
+            className="mt-5 inline-flex items-center gap-2 rounded-full bg-brand-light/10 px-3 py-1 text-xs font-medium text-brand-light/85 backdrop-blur-md"
           >
-            Compara cementerios, sepulturas y servicios exequiales en un solo
-            lugar
+            <Trees className="h-3.5 w-3.5 text-brand-orange" strokeWidth={1.75} />
+            Estamos de tu lado, con calma y claridad
+          </motion.div>
+
+          <motion.h1
+            custom={0.12}
+            variants={fadeUp}
+            initial="hidden"
+            animate="visible"
+            className="mt-6 text-balance text-3xl font-semibold leading-[1.12] tracking-tight text-brand-light sm:text-4xl md:text-5xl lg:text-[3.4rem]"
+          >
+            Un lugar de calma para tomar la decisión correcta para tu familia.
           </motion.h1>
 
           <motion.p
-            custom={0.16}
+            custom={0.2}
             variants={fadeUp}
             initial="hidden"
             animate="visible"
-            className="mt-5 max-w-2xl text-pretty text-base leading-relaxed text-brand-dark/70 sm:text-lg"
+            className="mt-5 max-w-2xl text-pretty text-base leading-relaxed text-brand-light/80 sm:text-lg"
           >
-            No estamos asociados a ninguna funeraria ni parque cementerio.
-            Te ayudamos a comparar con claridad para que tu familia elija la
-            mejor opción, con tranquilidad y sin presión.
+            Te acompañamos paso a paso a comparar parques, cementerios y
+            servicios exequiales. Sin prisa ni compromisos comerciales: nuestra
+            única prioridad es brindarte la orientación humana y transparente
+            que necesitas.
           </motion.p>
         </div>
 
         <motion.div
-          custom={0.28}
+          custom={0.3}
           variants={fadeUp}
           initial="hidden"
           animate="visible"
@@ -109,7 +134,7 @@ export function HeroSection() {
         >
           <form
             onSubmit={handleSubmit}
-            className="rounded-2xl border border-brand-dark/5 bg-white p-4 shadow-[0_18px_50px_-28px_rgba(30,58,43,0.35)] sm:p-5 lg:p-3"
+            className="rounded-3xl border border-white/40 bg-white/95 p-4 shadow-lift backdrop-blur-md sm:p-5 lg:p-3"
           >
             <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:gap-2">
               <SearchInput
@@ -133,7 +158,7 @@ export function HeroSection() {
               </datalist>
 
               <SelectInput
-                label="Tipo de Servicio"
+                label="Tipo de servicio"
                 name="serviceType"
                 options={SERVICE_OPTIONS}
                 placeholder="Elige un servicio"
@@ -147,10 +172,10 @@ export function HeroSection() {
               />
 
               <SelectInput
-                label="Tipo de Necesidad"
+                label="Momento de tu familia"
                 name="needType"
                 options={NEED_OPTIONS}
-                placeholder="¿Cuándo lo necesitas?"
+                placeholder="¿En qué momento estás?"
                 value={values.needType}
                 onChange={(event) =>
                   setValues((prev) => ({
@@ -169,16 +194,16 @@ export function HeroSection() {
                   variant="primary"
                   size="md"
                   fullWidth
-                  className="lg:min-w-[10.5rem] lg:px-6"
+                  className="lg:min-w-[12.5rem] lg:px-6"
                 >
-                  Buscar Opciones
+                  Buscar con tranquilidad
                 </Button>
               </div>
             </div>
           </form>
 
-          <p className="mt-4 text-center text-xs text-brand-dark/45 sm:text-sm">
-            Cotización rápida, sin compromiso y sin datos de contacto
+          <p className="mt-4 text-center text-xs text-brand-light/65 sm:text-sm">
+            Una búsqueda sencilla, sin compromiso y sin datos personales
             obligatorios.
           </p>
         </motion.div>

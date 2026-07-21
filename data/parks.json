@@ -1,0 +1,50 @@
+[
+  {
+    "id": "1",
+    "name": "Parque del Recuerdo",
+    "region": "RM",
+    "logoUrl": "/logos/parque-recuerdo.svg"
+  },
+  {
+    "id": "2",
+    "name": "Parques Sendero",
+    "region": "Nacional",
+    "logoUrl": "/logos/sendero.svg"
+  },
+  {
+    "id": "3",
+    "name": "Cementerio Metropolitano",
+    "region": "RM",
+    "logoUrl": "/logos/metropolitano.svg"
+  },
+  {
+    "id": "4",
+    "name": "Nuestros Parques",
+    "region": "RM",
+    "logoUrl": "/logos/nuestros-parques.svg"
+  },
+  {
+    "id": "5",
+    "name": "Cementerio General",
+    "region": "RM",
+    "logoUrl": "/logos/cementerio-general.svg"
+  },
+  {
+    "id": "6",
+    "name": "Parque El Prado",
+    "region": "RM",
+    "logoUrl": "/logos/el-prado.svg"
+  },
+  {
+    "id": "7",
+    "name": "Parque Los Olivos",
+    "region": "Valparaíso",
+    "logoUrl": "/logos/los-olivos.svg"
+  },
+  {
+    "id": "8",
+    "name": "Camposanto Memorial",
+    "region": "Biobío",
+    "logoUrl": "/logos/memorial.svg"
+  }
+]
