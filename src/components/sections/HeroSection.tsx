@@ -3,7 +3,6 @@
 import { useState, type FormEvent } from "react";
 import Image from "next/image";
 import { motion } from "framer-motion";
-import { Trees } from "lucide-react";
 import { Badge, Button, SearchInput, SelectInput } from "@/components/ui";
 import { BackgroundPattern } from "@/components/ui/BackgroundPattern";
 import type { HeroSearchValues } from "@/types/hero";
@@ -88,17 +87,6 @@ export function HeroSection() {
             >
               Orientación independiente y gratuita
             </Badge>
-          </motion.div>
-
-          <motion.div
-            custom={0.06}
-            variants={fadeUp}
-            initial="hidden"
-            animate="visible"
-            className="mt-5 inline-flex items-center gap-2 rounded-full bg-brand-light/10 px-3 py-1 text-xs font-medium text-brand-light/85 backdrop-blur-md"
-          >
-            <Trees className="h-3.5 w-3.5 text-brand-orange" strokeWidth={1.75} />
-            Estamos de tu lado, con calma y claridad
           </motion.div>
 
           <motion.h1

@@ -12,23 +12,23 @@ import { easeOut, fadeUpItem, staggerContainer } from "@/lib/motion";
 const features = [
   {
     id: "independientes",
-    title: "Independencia que protege tu tranquilidad",
+    title: "100% Independientes de las cadenas",
     description:
-      "Trabajamos con todas las entidades para mostrarte la realidad de cada opción, sin sesgos ni presiones.",
+      "No tenemos acuerdos de exclusividad ni metas comerciales con ningún cementerio. Te mostramos la realidad de cada opción sin sesgos.",
     icon: <ShieldCheck className="h-5 w-5" strokeWidth={1.75} />,
   },
   {
     id: "comparacion",
-    title: "Claridad en cada detalle",
+    title: "Transparencia total en costos",
     description:
-      "Te explicamos con transparencia costos de mantención, tipos de dominio y trámites para que no haya sorpresas.",
+      "Te explicamos sin letra chica los precios de compra, gastos de mantención anual y trámites para que nunca te lleves sorpresas.",
     icon: <BarChart3 className="h-5 w-5" strokeWidth={1.75} />,
   },
   {
     id: "cero-presion",
-    title: "Acompañamiento a tu propio ritmo",
+    title: "Asesoría centrada en tu familia",
     description:
-      "Respetamos tu tiempo y tus decisiones. Estamos para guiarte, no para venderte.",
+      "Respetamos tu ritmo y tu presupuesto. No estamos para presionarte a comprar, sino para guiarte a tomar la decisión correcta.",
     icon: <Lightbulb className="h-5 w-5" strokeWidth={1.75} />,
   },
 ] as const;
@@ -49,22 +49,23 @@ export function NeutralitySection() {
             className="lg:col-span-5"
           >
             <p className="text-xs font-medium uppercase tracking-[0.16em] text-brand-orange sm:text-sm">
-              Cuidado y acompañamiento
+              Quiénes somos y cómo te ayudamos
             </p>
             <h2 className="mt-3 text-balance text-2xl font-semibold tracking-tight text-brand-light sm:text-3xl md:text-4xl">
-              Nuestro compromiso es contigo y con tus seres queridos
+              Somos tu guía neutral para tomar decisiones con calma
             </h2>
             <p className="mt-4 max-w-md text-sm leading-relaxed text-brand-light/70 sm:text-base">
-              Estamos de tu lado. Tu tranquilidad es nuestro único compromiso:
-              te mostramos todas las alternativas con transparencia para que
-              elijas con libertad lo mejor para los tuyos.
+              En ComparaParques.cl no pertenecemos a ningún parque ni cementerio
+              en particular. Nacimos para ponernos de tu lado: comparamos todas
+              las alternativas del mercado con total transparencia para que
+              elijas libremente lo mejor para tu familia y tu economía.
             </p>
 
             <div className="mt-8 hidden lg:block">
               <SceneMedia
                 src={SITE_MEDIA.memorialPath}
                 alt="Sendero sereno entre árboles"
-                caption="Un espacio para decidir con calma y acompañamiento"
+                caption="Un aliado transparente en los momentos que más importan."
                 className="animate-float"
               />
             </div>
@@ -81,7 +82,7 @@ export function NeutralitySection() {
               <SceneMedia
                 src={SITE_MEDIA.memorialPath}
                 alt="Sendero sereno entre árboles"
-                caption="Un espacio para decidir con calma y acompañamiento"
+                caption="Un aliado transparente en los momentos que más importan."
               />
             </div>
 
